@@ -8,7 +8,6 @@ class Game
         play
     end
 
-
     def play
         main_p = @player
 
@@ -16,7 +15,9 @@ class Game
 
         combination_array = []
 
-        while @correct_guess == false || @guesses>0
+        until @correct_guess || @guesses.zero?
+
+            combination_array.clear
             puts("#{main_p.name}, choose your combination wisely:")
             chosen_combination = gets.chomp
             conversion = chosen_combination.split('')
@@ -32,32 +33,29 @@ class Game
         else
             puts('You failed... Better luck next time.')
         end
-
     end
 
-    def combination_check(array)
+    def combination_check(array, randomized_code)
         if array == randomized_code
             @correct_guess = true
         else
 
         end
-
     end
-
 end
 
 class PlayerName
-        attr_accessor :name
-    
-        def initialize
-            recieve_name
-        end
-    
-        def recieve_name
-            clear
-            puts 'Master, select your name:'
-            @name = gets.chomp
-        end
+    attr_accessor :name
+
+    def initialize
+       recieve_name
+    end
+
+    def recieve_name
+        clear
+        puts 'Master, select your name:'
+        @name = gets.chomp
+    end
 end
 
 def clear
@@ -65,4 +63,4 @@ def clear
 end
 
 player_name = PlayerName.new
-game = Game.new(player)
+game = Game.new(player_name)
