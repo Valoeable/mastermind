@@ -1,10 +1,11 @@
 class Game 
-    attr_accessor :guesses, :correct_guess
+    attr_accessor :guesses, :correct_guess, :hint_catcher
 
     def initialize(player)
         @guesses = 12
         @correct_guess = false
         @player = player
+        @hint_catcher = ['X', 'X', 'X', 'X']
         play
     end
 
@@ -17,6 +18,8 @@ class Game
 
         until @correct_guess || @guesses.zero?
 
+            @hint_catcher.clear
+            @hint_catcher = ['X', 'X', 'X', 'X']
             combination_array.clear
             puts("#{main_p.name}, choose your combination wisely:")
             chosen_combination = gets.chomp
@@ -31,7 +34,7 @@ class Game
         if @correct_guess == true
             puts('Congratulations! You got the secret code correctly!')
         else
-            puts('You failed... Better luck next time.')
+            puts("You failed... Better luck next time. The code was #{randomized_code}")
         end
     end
 
@@ -39,8 +42,28 @@ class Game
         if array == randomized_code
             @correct_guess = true
         else
-
-        end
+            print('Ooops, looks like you got it wrong, here are some hints:')
+            array.each_with_index do |color, i|
+                exact_once = 0
+                same_once = 0
+                index = 0
+                until index == 4
+                   if (color == randomized_code[index]) && (i != index) && (@hint_catcher[index] != 'E') && exact_once.zero? && same_once.zero?
+                    @hint_catcher[index] = 'S'
+                    same_once = 1
+                   elsif (color == randomized_code[index]) && (i == index)
+                    @hint_catcher[index] = 'E'
+                    exact_once = 1
+                   end
+                index += 1
+                end
+            end
+            exact = @hint_catcher.count('E')
+            same = @hint_catcher.count('S')
+            exact.times { print ' ■ ' }
+            same.times { print ' □ ' }
+            print("\n")
+        end    
     end
 end
 
