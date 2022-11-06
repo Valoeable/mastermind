@@ -47,13 +47,16 @@ class Game
                 exact_once = 0
                 same_once = 0
                 index = 0
+                exact_repair = nil
                 until index == 4
-                   if (color == randomized_code[index]) && (i != index) && (@hint_catcher[index] != 'E') && exact_once.zero? && same_once.zero?
+                   if (color == randomized_code[index]) && (i != index) && (@hint_catcher[index] != 'E') && (@hint_catcher[index] != 'S') && exact_once.zero? && same_once.zero?
                     @hint_catcher[index] = 'S'
-                    same_once = 1
+                    same_once = 1 unless array[i + 1] == randomized_code[index]
+                    exact_repair = index
                    elsif (color == randomized_code[index]) && (i == index)
                     @hint_catcher[index] = 'E'
                     exact_once = 1
+                    exact_check(exact_repair) unless exact_repair.nil?
                    end
                 index += 1
                 end
@@ -65,6 +68,11 @@ class Game
             print("\n")
         end    
     end
+
+    def exact_check(repair_index)
+            @hint_catcher[repair_index] = 'X'
+    end
+
 end
 
 class PlayerName
